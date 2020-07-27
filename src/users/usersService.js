@@ -15,7 +15,7 @@ const UsersService = {
       .insert(newUser)
       .into('idea_machine_users')
       .returning('*')
-      .first();
+      .then(rows => rows[0]);
   },
   hashPassword(password){
     return bcrypt.hash(password, 12);

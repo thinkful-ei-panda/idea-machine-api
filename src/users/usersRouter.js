@@ -1,17 +1,18 @@
 const express = require('express');
 const UsersService = require('./usersService');
-const bcrypt = require('bcryptjs');
 
 const UsersRouter = express.Router();
 
 UsersRouter
   .route('/')
   .post(express.json(), (req,res,next) => {
-    const {username,password} = req.body;
+    const {user_name,password} = req.body;
     let newUser = {
-      user_name:username,
+      user_name,
       password,
     };
+
+    //Check Username and password are valid
 
     for(const [key,value] of Object.entries(newUser))
       if(value == null)
@@ -25,20 +26,18 @@ UsersRouter
         if(hasUserWithUserName)
           return res.status(400).json({error: 'Username already in use'});
         
+        //Hash password and post to database
 
-        const hashedPassword = UsersService.hashPassword(password);
-        newUser.password = hashedPassword;
-
-        return UsersService.insertUser(req.app.get('db'),newUser)
-          .then(user => {
-            res.status(201).json(UsersService.serializeUser(user));
+        UsersService.hashPassword(password)
+          .then(hashedPassword => {
+            newUser.password = hashedPassword;
+            return UsersService.insertUser(req.app.get('db'),newUser)
+              .then(user => {
+                res.status(201).json(UsersService.serializeUser(user));
+              });
           });
-
       })
-      .catch(next);
-
-
-    
+      .catch(next);    
   });
 
 module.exports = UsersRouter;
