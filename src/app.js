@@ -5,6 +5,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const {NODE_ENV} = require('./config');
 
+const AuthRouter = require('./auth/authRouter');
+
 const app = express();
 
 const morgOption = (NODE_ENV === 'production')
@@ -18,6 +20,8 @@ app.use(helmet());
 app.get('/', (req,res) => {
   res.status(200).send('Hello Boilerplate');
 });
+
+app.use('/api/auth', AuthRouter);
 
 app.use(function errorHandler(error,req,res,next){ //eslint-disable-line
   let response;
