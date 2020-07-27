@@ -7,6 +7,7 @@ const {NODE_ENV} = require('./config');
 
 const AuthRouter = require('./auth/authRouter');
 const UsersRouter = require('./users/usersRouter');
+const IdeasRouter = require('./ideas/ideasRouter');
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.get('/', (req,res) => {
 
 app.use('/api/auth', AuthRouter);
 app.use('/api/users',UsersRouter);
+app.use('/api/ideas',IdeasRouter);
 
 app.use(function errorHandler(error,req,res,next){ //eslint-disable-line
   let response;
