@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const {NODE_ENV} = require('./config');
 
 const AuthRouter = require('./auth/authRouter');
+const UsersRouter = require('./users/usersRouter');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.get('/', (req,res) => {
 });
 
 app.use('/api/auth', AuthRouter);
+app.use('/api/users',UsersRouter);
 
 app.use(function errorHandler(error,req,res,next){ //eslint-disable-line
   let response;
