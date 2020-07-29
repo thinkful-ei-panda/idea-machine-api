@@ -2,7 +2,8 @@ BEGIN;
 
 TRUNCATE
 idea_machine_users,
-idea_machine_ideas
+idea_machine_ideas,
+idea_machine_followed_ideas
 RESTART IDENTITY CASCADE;
 
 INSERT INTO idea_machine_users (user_name, password)
@@ -36,5 +37,25 @@ VALUES
     'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dignissimos architecto repellat, in amet soluta exercitationem perferendis eius perspiciatis praesentium voluptate nisi deleniti eaque? Rerum ea quisquam dolore, non error earum?'),
   ( 'Tenth post',  4,
     'Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum molestiae accusamus veniam consectetur tempora, corporis obcaecati ad nisi asperiores tenetur, autem magnam. Iste, architecto obcaecati tenetur quidem voluptatum ipsa quam?');
+
+INSERT INTO idea_machine_followed_ideas (follower_id, idea_id)
+VALUES
+  (1,1),
+  (1,2),
+  (1,3),
+  (1,4),
+  (1,5),
+  (1,6),
+  (2,1),
+  (2,2),
+  (2,3),
+  (2,4),
+  (2,5),
+  (2,6),
+  (3,1),
+  (3,2),
+  (3,3),
+  (3,4),
+  (3,5);
 
 COMMIT;

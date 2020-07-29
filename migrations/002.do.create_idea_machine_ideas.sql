@@ -8,4 +8,4 @@ CREATE TABLE idea_machine_ideas (
 
 ALTER TABLE idea_machine_ideas
   ADD COLUMN
-    author_id INTEGER REFERENCES idea_machine_users(id) ON DELETE SET NULL;
+    author_id INTEGER NOT NULL REFERENCES idea_machine_users(id) ON DELETE SET NULL;
