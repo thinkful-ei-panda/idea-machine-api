@@ -17,19 +17,11 @@ const ideasService = {
       .where({author_id});
   },
 
-  getFollowedIdeasByFollowerId(db,follower_id){
-    return db
-      .select('idea_machine_ideas.id','idea_machine_ideas.title','idea_machine_ideas.content','idea_machine_ideas.date_created','idea_machine_users.user_name')
-      .from('idea_machine_followed_ideas')
-      .join('idea_machine_ideas', 'idea_machine_followed_ideas.idea_id', '=', 'idea_machine_ideas.id')
-      .join('idea_machine_users', 'idea_machine_ideas.author_id', '=', 'idea_machine_users.id')      
-      .where({follower_id,public_status:true});
-  },
-
   getIdeaByIdeaId(db,id){
     return db('idea_machine_ideas')
-      .select()
-      .where({id})
+      .select('idea_machine_ideas.id','idea_machine_ideas.title','idea_machine_ideas.content','idea_machine_ideas.date_created','idea_machine_users.user_name','idea_machine_ideas.public_status')
+      .join('idea_machine_users', 'idea_machine_ideas.author_id', '=', 'idea_machine_users.id').select()
+      .where('idea_machine_ideas.id',id)
       .first();
   },
 
@@ -44,6 +36,12 @@ const ideasService = {
   updateIdea(db,id,ideaUpdateFields){
     return db('idea_machine_ideas')
       .update(ideaUpdateFields)
+      .where({id});
+  },
+
+  deleteIdea(db,id){
+    return db('idea_machine_ideas')
+      .delete()
       .where({id});
   },
 

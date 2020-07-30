@@ -3,5 +3,6 @@ module.exports = {
   NODE_ENV: process.env.NODE_ENV || 'development',
   DB_URL:!(process.env.NODE_ENV === 'test')
     ?process.env.DB_URL
-    :process.env.TEST_DB_URL
+    :process.env.TEST_DB_URL,
+  JWT_SECRET:process.env.JWT_SECRET
 };

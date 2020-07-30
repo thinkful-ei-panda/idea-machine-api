@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+const config = require('../config');
 
 
 const AuthService = {
@@ -7,7 +9,13 @@ const AuthService = {
       .select('*')
       .where({ user_name })
       .first();
-  }
+  },
+
+  verifyJwt(token) {
+    return jwt.verify(token, config.JWT_SECRET, {
+      algorithms: ['HS256'],
+    });
+  },
 };
 
 module.exports = AuthService;

@@ -15,7 +15,7 @@ UsersRouter
     //Check Username and password are valid
 
     for(const [key,value] of Object.entries(newUser))
-      if(value == null)
+      if(!value)
         return res.status(400).json({error: `Missing ${key} in request body`});
       
     if(password.length < 8)

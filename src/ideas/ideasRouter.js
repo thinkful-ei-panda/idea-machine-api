@@ -1,9 +1,12 @@
 const express = require('express');
 const ideasService = require('./ideasService');
 const IdeasRouter = express.Router();
+const requireAuth = require('../middleware/jwt-auth');
 
 IdeasRouter
   .route('/')
+
+  //GET All public ideas
   .get((req,res,next) => {
     ideasService.getAllPublicIdeas(req.app.get('db'))
       .then(ideas => {
@@ -12,7 +15,9 @@ IdeasRouter
       })
       .catch(next);
   })
-  .post(express.json(), (req,res,next) => {
+
+  //POST post an idea
+  .post(requireAuth, express.json(), (req,res,next) => {
     const {title,content} = req.body;
     let newIdea = {title,content};
 
@@ -31,6 +36,9 @@ IdeasRouter
 
 IdeasRouter
   .route('/:idea_id')
+  .all(requireAuth)
+
+  //GET
   .get((req,res,next) => {
     const {idea_id} = req.params;
     ideasService.getIdeaByIdeaId(req.app.get('db'),idea_id)
@@ -39,6 +47,8 @@ IdeasRouter
       })
       .catch(next);
   })
+
+  //PATCH update an idea
   .patch(express.json(), (req,res,next) => {
     const {idea_id} = req.params;
     const {title,content,public_status} = req.body;
@@ -49,38 +59,43 @@ IdeasRouter
       public_status,
     };
 
-    ideasService.updateIdea(req.app.get('db'),idea_id,ideaUpdateFields)
-      .then(() => {
-        return res.status(204).end();
+    ideasService.getIdeaByIdeaId(req.app.get('db'),idea_id)
+      .then(idea => {
+        if(!idea)
+          return res.status(401).json({error: 'Could not find idea'});    
+          
+        if(idea.user_name !== req.user.user_name)
+          return res.status(401).json({error: 'Unauthorized request'});
+
+        ideasService.updateIdea(req.app.get('db'),idea_id,ideaUpdateFields)
+          .then(() => {
+            return res.status(204).end();
+          })
+          .catch(next);
       })
       .catch(next);
   })
+
+  //DELETE delete an idea
   .delete(express.json(), (req,res,next) => {
-    res.json('delete');
-  });
+    const {idea_id} = req.params;
+    ideasService.getIdeaByIdeaId(req.app.get('db'),idea_id)
+      .then(idea => {
+        if(!idea)
+          return res.status(401).json({error: 'Could not find idea'});      
 
-IdeasRouter
-  .route('/user/:user_id')
-  .get((req,res,next) => {
-    const {user_id} = req.params;
-    ideasService.getIdeasByUserId(req.app.get('db'),user_id)
-      .then(ideas => {
-        const cleanedIdeas = ideas.map(idea => ideasService.serializeIdea(idea));
-        return res.json(cleanedIdeas);
-      })
+        if(idea.user_name !== req.user.user_name)
+          return res.status(401).json({error: 'Unauthorized request'});
+
+        ideasService.deleteIdea(req.app.get('db'),idea_id)
+          .then(() => res.status(204).end())
+          .catch(next);
+      })        
       .catch(next);
   });
 
-IdeasRouter
-  .route('/followed/:user_id')
-  .get((req,res,next) => {
-    const {user_id} = req.params;
-    ideasService.getFollowedIdeasByFollowerId(req.app.get('db'),user_id)
-      .then(ideas => {
-        const cleanedIdeas = ideas.map(idea => ideasService.serializeIdea(idea));
-        return res.json(cleanedIdeas);
-      })
-      .catch(next);
-  });
+
+
+
 
 module.exports = IdeasRouter;
