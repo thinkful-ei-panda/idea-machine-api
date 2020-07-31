@@ -25,10 +25,10 @@ IdeasRouter
       if(!value)
         res.status(400).json(`Missing ${key}`);
 
-    newIdea.author_id = 1;
+    newIdea.author_id = req.user.user_name;
     ideasService.insertIdea(req.app.get('db'),newIdea)
       .then(idea => {
-        idea.user_name = 'dunder';
+        idea.user_name = newIdea.author;
         return res.json(ideasService.serializeIdea(idea));
       })
       .catch(next);
