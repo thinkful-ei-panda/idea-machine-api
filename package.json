@@ -12,7 +12,7 @@
     "migrate:production":"heroku run npm run migrate",
     "predeploy": "npm audit",
     "deploy": "git push heroku master",
-    "postdeploy": "npm run migrate:production",
+    "postdeploy": "npm run migrate:production"
 
   },
   "engines":{
