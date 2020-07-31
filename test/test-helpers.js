@@ -1,3 +1,7 @@
+const { JWT_SECRET } = require('../src/config');
+
+const jwt = require('jsonwebtoken');
+
 function makeUsersArray() {
   return [
     {user_name: 'dunder', password: '$2a$12$lHK6LVpc15/ZROZcKU00QeiD.RyYq5dVlV/9m4kKYbGibkRc5l4Ne'},
@@ -63,6 +67,24 @@ function makeIdeasFixtures(){
   return { testUsers, testIdeas, testFollowedIdeas};
 }
 
+function populateUsers(db,testUsers){
+  return db.into('idea_machine_users').insert(testUsers);
+}
+
+function populateIdeas(db,testIdeas){
+  return db.into('idea_machine_ideas').insert(testIdeas);
+}
+
+function populateFollowedIdeas(db,testFollowedIdeas){
+  return db.into('idea_machine_followed_ideas').insert(testFollowedIdeas);
+}
+        
+function populateTables(db,testUsers,testIdeas,testFollowedIdeas){
+  populateUsers(db,testUsers);
+  populateIdeas(db,testIdeas);
+  populateFollowedIdeas(db,testFollowedIdeas);
+}
+
 function cleanTables(db) {
   return db.transaction(trx =>
     trx.raw(
@@ -76,10 +98,23 @@ function cleanTables(db) {
   );
 }
 
+function makeBearerToken(testUser){
+  const token = jwt.sign({user_id: testUser.id},process.env.JWT_SECRET,{subject : testUser.user_name});
+  
+  return token;
+}
+
 module.exports = {
-  cleanTables,
   makeUsersArray,
   makeIdeasArray,
   makeIdeasFixtures,
+
+  populateUsers,
+  populateIdeas,
+  populateFollowedIdeas,
+  populateTables,
+
+  cleanTables,
+  makeBearerToken,
 
 };

@@ -7,16 +7,15 @@
     "test": "mocha --require test/setup.js",
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "migrate":"postgrator --config postgrator-config.js",
-    "migrate:test":"env NODE_ENV=test npm run migrate",
-    "migrate:production":"heroku run npm run migrate",
+    "migrate": "postgrator --config postgrator-config.js",
+    "migrate:test": "env NODE_ENV=test npm run migrate",
+    "migrate:production": "heroku run npm run migrate",
     "predeploy": "npm audit",
     "deploy": "git push heroku master",
     "postdeploy": "npm run migrate:production"
-
   },
-  "engines":{
-    "node" : "13.12.0"
+  "engines": {
+    "node": "13.12.0"
   },
   "keywords": [],
   "author": "",

@@ -21,11 +21,13 @@ IdeasRouter
     const {title,content} = req.body;
     let newIdea = {title,content};
 
+    console.log(newIdea);
+
     for(const [key,value] of Object.entries(newIdea))
       if(!value)
-        res.status(400).json(`Missing ${key}`);
+        return res.status(400).json(`Missing ${key}`);
 
-    console.log(req.user);
+    
     newIdea.author_id = req.user.id;
     ideasService.insertIdea(req.app.get('db'),newIdea)
       .then(idea => {
