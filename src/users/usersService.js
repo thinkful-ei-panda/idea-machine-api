@@ -1,4 +1,4 @@
-const { DB_URL } = require('../config');
+const { DATABASE_URL } = require('../config');
 const xss = require('xss');
 const bcrypt = require('bcryptjs');
 
