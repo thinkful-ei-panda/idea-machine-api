@@ -34,6 +34,7 @@ const ideasService = {
   },
 
   updateIdea(db,id,ideaUpdateFields){
+    console.log(ideaUpdateFields);
     return db('idea_machine_ideas')
       .update(ideaUpdateFields)
       .where({id});

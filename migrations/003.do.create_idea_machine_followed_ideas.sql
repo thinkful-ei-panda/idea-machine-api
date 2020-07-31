@@ -4,9 +4,9 @@ CREATE TABLE idea_machine_followed_ideas (
 
 ALTER TABLE idea_machine_followed_ideas
 ADD COLUMN
-follower_id INTEGER NOT NULL REFERENCES idea_machine_users(id) ON DELETE SET NULL;
+follower_id INTEGER REFERENCES idea_machine_users(id) ON DELETE CASCADE;
 
 ALTER TABLE idea_machine_followed_ideas
 ADD COLUMN
-idea_id INTEGER NOT NULL REFERENCES idea_machine_ideas(id) ON DELETE SET NULL;
+idea_id INTEGER REFERENCES idea_machine_ideas(id) ON DELETE CASCADE;
 

@@ -52,12 +52,15 @@ IdeasRouter
   .patch(express.json(), (req,res,next) => {
     const {idea_id} = req.params;
     const {title,content,public_status} = req.body;
-
+    
     const ideaUpdateFields = {
-      title,
-      content,
+      title: (title === '') ? undefined : title,
+      content: (content === '') ? undefined :content,
       public_status,
     };
+
+    if(ideaUpdateFields.title == null && ideaUpdateFields.content == null && ideaUpdateFields.public_status === undefined)
+      return res.status(400).json({error: 'Needs at least one update field'});
 
     ideasService.getIdeaByIdeaId(req.app.get('db'),idea_id)
       .then(idea => {
