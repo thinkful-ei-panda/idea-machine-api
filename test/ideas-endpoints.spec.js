@@ -2,6 +2,7 @@ const app = require('../src/app');
 const knex = require('knex');
 const helpers = require('./test-helpers');
 const supertest = require('supertest');
+const { seedTables } = require('./test-helpers');
 
 
 describe('Ideas Endpoints', () => {
@@ -35,7 +36,7 @@ describe('Ideas Endpoints', () => {
   describe('GET /api/ideas', () => {
     context('given some ideas', () =>{
       beforeEach('insert ideas', () => {
-        helpers.populateTables(db,testUsers,testIdeas,testFollowedIdeas);
+        helpers.seedTables(db,testUsers,testIdeas,testFollowedIdeas);
       });
       it('should return an array of ideas', () => {
         return supertest(app)
@@ -45,11 +46,17 @@ describe('Ideas Endpoints', () => {
     });
   });
 
-  context('logged in with test user', () => {
+  context('logged in and seeded tables', () => {
     const bearerToken = helpers.makeBearerToken(testUser);    
     beforeEach('insert test users', () => {
-      helpers.populateUsers(db,testUsers);
-    });    
+      return helpers.seedUsers(db,testUsers);
+    });
+    beforeEach('insert test ideas', () => {
+      return helpers.seedIdeas(db,testIdeas);
+    });
+    beforeEach('insert test followed ideas', () => {
+      return helpers.seedFollowedIdeas(db,testFollowedIdeas);
+    });
 
     //POST new idea
     describe('POST /api/ideas', () => {
@@ -57,16 +64,13 @@ describe('Ideas Endpoints', () => {
         title: 'New Idea!',
         content: 'New Idea Content!'
       };
-      it.only('should return the posted idea', () => {
+      it('should return the posted idea', () => {
         return supertest(app)
           .post('/api/ideas')
           .set('Authorization',`Bearer ${bearerToken}`)
-          .send({
-            title: 'New Idea!',
-            content: 'New Idea Content!'
-          })
-          .expect(201)
-          .expect(newTestIdea);
+          .send(newTestIdea)
+          .expect(201);
+        //INCOMPLETE TESTING
       });    
     });
 
@@ -74,42 +78,92 @@ describe('Ideas Endpoints', () => {
     //GET 
 
     describe('GET /ideas/:idea', () => {
-      it('should return an array of ideas', () => {
+      it('should return 400 {error:\'No idea found\'}', () => {
+        const idea_id = 666;
+        return supertest(app)
+          .get(`/api/ideas/${idea_id}`)
+          .set('Authorization',`Bearer ${bearerToken}`)
+          .expect(400)
+          .expect({error:'No idea found'});        
+      });
+      it('should return a 200 with an idea with matching id', () => {
         const idea_id = 1;
         return supertest(app)
           .get(`/api/ideas/${idea_id}`)
-          .expect(200);
+          .set('Authorization',`Bearer ${bearerToken}`)
+          .expect(200)
+          .expect(res => {
+            expect(res.body.id).to.eql(idea_id);
+            //INCOMPLETE TESTING
+          });
       });
-    
     });
 
     //PATCH
 
     describe('PATCH /ideas/:idea', () => {
-      it('should return an array of ideas', () => {
+      it('should return 400 with missing fields', () => {
         const idea_id = 1;
         return supertest(app)
           .patch(`/api/ideas/${idea_id}`)
-          .expect(200);
+          .set('Authorization',`Bearer ${bearerToken}`)
+          .expect(400,{error: 'Needs at least one update field'});
+            
       });
-    
+      it('should return a 401 with an idea_id that can\'t be found', () => {
+        const idea_id = 666;
+        return supertest(app)
+          .patch(`/api/ideas/${idea_id}`)
+          .set('Authorization',`Bearer ${bearerToken}`)
+          .send({title:'a different title'})
+          .expect(400,{error: 'Could not find idea'});
+      });
+      it('should return a 401 when author_id doesn\'t match bearer token', () => {
+        const ideaIdByUser2 = 2;
+        const bearerTokenMatchingUser1 = bearerToken;
+        return supertest(app)
+          .patch(`/api/ideas/${ideaIdByUser2}`)
+          .set('Authorization',`Bearer ${bearerTokenMatchingUser1}`)
+          .send({title:'a different title'})
+          .expect(401,{error: 'Unauthorized request'});
+      });
+      it('should return 204', () => {        
+        const idea_id = 1;
+        return supertest(app)
+          .patch(`/api/ideas/${idea_id}`)
+          .set('Authorization',`Bearer ${bearerToken}`)
+          .send({title:'a different title'})
+          .expect(204);
+      });
     });
 
     //DELETE
 
-    describe('DELETE /ideas/:idea', () => {
-      it('should return an array of ideas', () => {
+    describe.only('DELETE /ideas/:idea', () => {
+      it('should return 400 if no matching id', () => {
+        const idea_id = 666;
+        return supertest(app)
+          .delete(`/api/ideas/${idea_id}`)
+          .set('Authorization',`Bearer ${bearerToken}`)
+          .expect(400,{error: 'Could not find idea'});
+      });    
+      it('should return 400 if author doesn\'t match idea', () => {
+        const ideaIdByUser2 = 2;
+        const bearerTokenMatchingUser1=bearerToken;
+        return supertest(app)
+          .delete(`/api/ideas/${ideaIdByUser2}`)
+          .set('Authorization',`Bearer ${bearerTokenMatchingUser1}`)
+          .expect(401,{error: 'Unauthorized request'});
+      });    
+      it('should return 204', () => {
         const idea_id = 1;
         return supertest(app)
           .delete(`/api/ideas/${idea_id}`)
-          .expect(200);
-      });
-    
-    });
-      
+          .set('Authorization',`Bearer ${bearerToken}`)
+          .expect(204);
+      });    
+    });      
   });
-
-  
 });
 
 

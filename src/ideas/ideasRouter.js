@@ -32,7 +32,7 @@ IdeasRouter
     ideasService.insertIdea(req.app.get('db'),newIdea)
       .then(idea => {
         idea.user_name = newIdea.author;
-        return res.json(ideasService.serializeIdea(idea));
+        return res.status(201).json(ideasService.serializeIdea(idea));
       })
       .catch(next);
   });
@@ -43,9 +43,12 @@ IdeasRouter
 
   //GET
   .get((req,res,next) => {
-    const {idea_id} = req.params;
+    const {idea_id} = req.params;    
     ideasService.getIdeaByIdeaId(req.app.get('db'),idea_id)
       .then(idea => {
+        if(!idea)
+          return res.status(400).json({error:'No idea found'});
+        
         return res.status(200).json(ideasService.serializeIdea(idea));
       })
       .catch(next);
@@ -53,6 +56,7 @@ IdeasRouter
 
   //PATCH update an idea
   .patch(express.json(), (req,res,next) => {
+    console.log('IN PATCH');
     const {idea_id} = req.params;
     const {title,content,public_status} = req.body;
     
@@ -62,13 +66,15 @@ IdeasRouter
       public_status,
     };
 
-    if(ideaUpdateFields.title == null && ideaUpdateFields.content == null && ideaUpdateFields.public_status === undefined)
+    if(ideaUpdateFields.title == null && ideaUpdateFields.content == null && ideaUpdateFields.public_status === undefined){    
+      console.log('NEED UPDATE FIELD');
       return res.status(400).json({error: 'Needs at least one update field'});
+    }
 
     ideasService.getIdeaByIdeaId(req.app.get('db'),idea_id)
       .then(idea => {
         if(!idea)
-          return res.status(401).json({error: 'Could not find idea'});    
+          return res.status(400).json({error: 'Could not find idea'});    
           
         if(idea.user_name !== req.user.user_name)
           return res.status(401).json({error: 'Unauthorized request'});
@@ -88,7 +94,7 @@ IdeasRouter
     ideasService.getIdeaByIdeaId(req.app.get('db'),idea_id)
       .then(idea => {
         if(!idea)
-          return res.status(401).json({error: 'Could not find idea'});      
+          return res.status(400).json({error: 'Could not find idea'});      
 
         if(idea.user_name !== req.user.user_name)
           return res.status(401).json({error: 'Unauthorized request'});

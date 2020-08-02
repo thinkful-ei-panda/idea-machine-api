@@ -67,22 +67,22 @@ function makeIdeasFixtures(){
   return { testUsers, testIdeas, testFollowedIdeas};
 }
 
-function populateUsers(db,testUsers){
+function seedUsers(db,testUsers){
   return db.into('idea_machine_users').insert(testUsers);
 }
 
-function populateIdeas(db,testIdeas){
+function seedIdeas(db,testIdeas){
   return db.into('idea_machine_ideas').insert(testIdeas);
 }
 
-function populateFollowedIdeas(db,testFollowedIdeas){
+function seedFollowedIdeas(db,testFollowedIdeas){
   return db.into('idea_machine_followed_ideas').insert(testFollowedIdeas);
 }
         
-function populateTables(db,testUsers,testIdeas,testFollowedIdeas){
-  populateUsers(db,testUsers);
-  populateIdeas(db,testIdeas);
-  populateFollowedIdeas(db,testFollowedIdeas);
+function seedTables(db,testUsers,testIdeas,testFollowedIdeas){
+  seedUsers(db,testUsers);
+  seedIdeas(db,testIdeas);
+  seedFollowedIdeas(db,testFollowedIdeas);
 }
 
 function cleanTables(db) {
@@ -109,10 +109,10 @@ module.exports = {
   makeIdeasArray,
   makeIdeasFixtures,
 
-  populateUsers,
-  populateIdeas,
-  populateFollowedIdeas,
-  populateTables,
+  seedUsers,
+  seedIdeas,
+  seedFollowedIdeas,
+  seedTables,
 
   cleanTables,
   makeBearerToken,
