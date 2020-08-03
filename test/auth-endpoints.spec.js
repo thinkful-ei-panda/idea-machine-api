@@ -3,7 +3,6 @@ const knex = require('knex');
 const helpers = require('./test-helpers');
 const supertest = require('supertest');
 const { expect } = require('chai');
-const { makeBearerToken, seedUsers } = require('./test-helpers');
 
 
 describe('Auth Endpoints', () => {

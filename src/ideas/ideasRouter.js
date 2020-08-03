@@ -56,7 +56,6 @@ IdeasRouter
 
   //PATCH update an idea
   .patch(express.json(), (req,res,next) => {
-    console.log('IN PATCH');
     const {idea_id} = req.params;
     const {title,content,public_status} = req.body;
     
@@ -67,7 +66,6 @@ IdeasRouter
     };
 
     if(ideaUpdateFields.title == null && ideaUpdateFields.content == null && ideaUpdateFields.public_status === undefined){    
-      console.log('NEED UPDATE FIELD');
       return res.status(400).json({error: 'Needs at least one update field'});
     }
 
