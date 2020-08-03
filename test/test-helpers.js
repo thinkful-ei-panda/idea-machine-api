@@ -104,6 +104,12 @@ function makeBearerToken(testUser){
   return token;
 }
 
+function verifyJwt(token) {
+  return jwt.verify(token, process.env.JWT_SECRET, {
+    algorithms: ['HS256'],
+  });
+}
+
 module.exports = {
   makeUsersArray,
   makeIdeasArray,
@@ -116,5 +122,6 @@ module.exports = {
 
   cleanTables,
   makeBearerToken,
+  verifyJwt,
 
 };

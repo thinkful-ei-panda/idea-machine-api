@@ -32,7 +32,7 @@ function requireAuth(req,res,next){
         next();
       })
       .catch(err => {
-        console.log('COULD NOT GET BY USER NAMD');
+        console.log('COULD NOT GET BY USER NAME');
         console.error(err);
         next(err);
       });

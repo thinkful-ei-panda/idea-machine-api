@@ -139,7 +139,7 @@ describe('Ideas Endpoints', () => {
 
     //DELETE
 
-    describe.only('DELETE /ideas/:idea', () => {
+    describe('DELETE /ideas/:idea', () => {
       it('should return 400 if no matching id', () => {
         const idea_id = 666;
         return supertest(app)
