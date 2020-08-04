@@ -40,18 +40,18 @@ FollowedIdeasRouter
     FollowedIdeasService.getByIdeaIdAndFollowerId(req.app.get('db'),idea_id,targetIdeaToFollow.follower_id)
       .then(idea => {
         if(idea)
-          return res.status(401).json({error: 'You are already following this idea'});
+          return res.status(400).json({error: 'You are already following this idea'});
 
         ideasService.getIdeaByIdeaId(req.app.get('db'),idea_id)
           .then(idea => {
             if(!idea)
-              return res.status(401).json({error: 'That idea doesn\'t exist'});
+              return res.status(400).json({error: 'That idea doesn\'t exist'});
 
             FollowedIdeasService.insertFollowedIdea(req.app.get('db'),targetIdeaToFollow)
               .then(followedIdea => {
                 FollowedIdeasService.getById(req.app.get('db'),followedIdea.id)
                   .then(idea => {
-                    res.json(ideasService.serializeIdea(idea));
+                    res.status(201).json(ideasService.serializeIdea(idea));
                   })
                   .catch(next);
               })
@@ -75,19 +75,18 @@ FollowedIdeasRouter
   })
   .delete((req,res,next) => {
     const {id} = req.params;
-    FollowedIdeasService.getByIdeaIdAndFollowerId(req.app.get('db'),id,req.user.id)
-      .then(followedIdea => {
+    FollowedIdeasService.getByIdeaIdAndFollowerId(req.app.get('db'),Number(id),Number(req.user.id))
+      .then(followedIdea => { 
+        console.log(followedIdea);       
         if(!followedIdea)
           return res.status(401).json({error: 'Could not find followed idea'});        
-      })
-      .then(() => {
-        FollowedIdeasService.deleteMatchingIdeaIdAndFollowerId(req.app.get('db'),id,req.user.id)
-          .then(() => res.status(204).json());
-      });
-    
-      
 
-    
+        
+        FollowedIdeasService.deleteMatchingIdeaIdAndFollowerId(req.app.get('db'),id,req.user.id)
+          .then(() => res.status(204).json())
+          .catch(next);        
+      })
+      .catch(next);
   });
 
 
