@@ -9,7 +9,6 @@ const AuthRouter = require('./auth/authRouter');
 const UsersRouter = require('./users/usersRouter');
 const IdeasRouter = require('./ideas/ideasRouter');
 const FollowedIdeasRouter = require('./followedIdeas/followedIdeasRouter');
-const MyIdeasRouter = require('./ideas/myIdeasRouter');
 
 const app = express();
 
@@ -24,6 +23,12 @@ app.use(helmet());
 app.get('/', (req,res) => {
   res.status(200).send('Hello Boilerplate');
 });
+
+// app.use(function(req, res, next) {
+//   res.setHeader('Access-Control-Allow-Origin', 'https://idea-machine.vercel.app'); // update to match the domain you will make the request from
+//   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//   next();
+// });
 
 app.use('/api/auth', AuthRouter);
 app.use('/api/users',UsersRouter);
