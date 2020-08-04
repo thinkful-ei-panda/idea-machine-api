@@ -80,9 +80,14 @@ function seedFollowedIdeas(db,testFollowedIdeas){
 }
         
 function seedTables(db,testUsers,testIdeas,testFollowedIdeas){
-  seedUsers(db,testUsers);
-  seedIdeas(db,testIdeas);
-  seedFollowedIdeas(db,testFollowedIdeas);
+  // return Promise.all([
+    return db.transaction(async (trx) => {
+      await seedUsers(trx,testUsers);
+      await seedIdeas(trx,testIdeas);
+      await seedFollowedIdeas(trx,testFollowedIdeas);
+    })
+    
+  // ]);
 }
 
 function cleanTables(db) {

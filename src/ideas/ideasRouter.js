@@ -21,8 +21,6 @@ IdeasRouter
     const {title,content} = req.body;
     let newIdea = {title,content};
 
-    console.log(newIdea);
-
     for(const [key,value] of Object.entries(newIdea))
       if(!value)
         return res.status(400).json(`Missing ${key}`);
