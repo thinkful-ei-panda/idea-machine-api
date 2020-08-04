@@ -29,7 +29,6 @@ app.use('/api/auth', AuthRouter);
 app.use('/api/users',UsersRouter);
 app.use('/api/ideas',IdeasRouter);
 app.use('/api/followedIdeas',FollowedIdeasRouter);
-app.use('/api/my-ideas',MyIdeasRouter);
 
 app.use(function errorHandler(error,req,res,next){ //eslint-disable-line
   let response;
