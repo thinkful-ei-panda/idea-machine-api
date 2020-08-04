@@ -36,7 +36,7 @@ IdeasRouter
   });
 
 IdeasRouter
-  .route('/:idea_id')
+  .route('/idea/:idea_id')
   .all(requireAuth)
 
   //GET
@@ -99,6 +99,22 @@ IdeasRouter
           .then(() => res.status(204).end())
           .catch(next);
       })        
+      .catch(next);
+  });
+
+IdeasRouter  
+  .route('/my-ideas')
+  .all(requireAuth)
+
+  //GET get all ideas made by logged in user
+  .get((req,res,next) => {
+    const user_id = req.user.id;
+
+    ideasService.getIdeasByUserId(req.app.get('db'),user_id)
+      .then(ideas => {
+        const cleanedIdeas = ideas.map(idea => ideasService.serializeIdea(idea));
+        return res.json(cleanedIdeas);
+      })
       .catch(next);
   });
 

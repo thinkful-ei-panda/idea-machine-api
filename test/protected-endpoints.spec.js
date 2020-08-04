@@ -36,19 +36,19 @@ describe('Protected Endpoints', () => {
       describe:'POST /API/ideas'
     },
     {
-      path:'/api/ideas/1',
+      path:'/api/ideas/idea/1',
       method:supertest(app).get,
-      describe:'GET /API/ideas/1',
+      describe:'GET /API/ideas/idea/1',
     },
     {
-      path:'/api/ideas/1',
+      path:'/api/ideas/idea/1',
       method:supertest(app).delete,
-      describe:'DELETE /API/ideas'
+      describe:'DELETE /API/ideas/idea/1'
     },
     {
-      path:'/api/ideas/1',
+      path:'/api/ideas/idea/1',
       method:supertest(app).patch,
-      describe:'PATCH /API/ideas'
+      describe:'PATCH /API/ideas/idea/1'
     },
     {
       path:'/api/followedIdeas',

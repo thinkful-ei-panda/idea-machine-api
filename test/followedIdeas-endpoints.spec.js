@@ -6,7 +6,7 @@ const { expect } = require('chai');
 const { beforeEach } = require('mocha');
 
 
-describe.only('Followed Ideas Endpoints', () => {
+describe('Followed Ideas Endpoints', () => {
   let db;
 
   const {

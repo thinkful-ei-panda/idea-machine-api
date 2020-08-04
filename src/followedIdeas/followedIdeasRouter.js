@@ -77,7 +77,6 @@ FollowedIdeasRouter
     const {id} = req.params;
     FollowedIdeasService.getByIdeaIdAndFollowerId(req.app.get('db'),Number(id),Number(req.user.id))
       .then(followedIdea => { 
-        console.log(followedIdea);       
         if(!followedIdea)
           return res.status(401).json({error: 'Could not find followed idea'});        
 

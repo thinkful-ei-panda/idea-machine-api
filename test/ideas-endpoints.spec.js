@@ -77,11 +77,11 @@ describe('Ideas Endpoints', () => {
     //Route '/:idea'
     //GET 
 
-    describe('GET /ideas/:idea', () => {
+    describe('GET /ideas/idea/:idea', () => {
       it('should return 400 {error:\'No idea found\'}', () => {
         const idea_id = 666;
         return supertest(app)
-          .get(`/api/ideas/${idea_id}`)
+          .get(`/api/ideas/idea/${idea_id}`)
           .set('Authorization',`Bearer ${bearerToken}`)
           .expect(400)
           .expect({error:'No idea found'});        
@@ -89,7 +89,7 @@ describe('Ideas Endpoints', () => {
       it('should return a 200 with an idea with matching id', () => {
         const idea_id = 1;
         return supertest(app)
-          .get(`/api/ideas/${idea_id}`)
+          .get(`/api/ideas/idea/${idea_id}`)
           .set('Authorization',`Bearer ${bearerToken}`)
           .expect(200)
           .expect(res => {
@@ -101,11 +101,11 @@ describe('Ideas Endpoints', () => {
 
     //PATCH
 
-    describe('PATCH /ideas/:idea', () => {
+    describe('PATCH /ideas/idea/:idea', () => {
       it('should return 400 with missing fields', () => {
         const idea_id = 1;
         return supertest(app)
-          .patch(`/api/ideas/${idea_id}`)
+          .patch(`/api/ideas/idea/${idea_id}`)
           .set('Authorization',`Bearer ${bearerToken}`)
           .expect(400,{error: 'Needs at least one update field'});
             
@@ -113,7 +113,7 @@ describe('Ideas Endpoints', () => {
       it('should return a 401 with an idea_id that can\'t be found', () => {
         const idea_id = 666;
         return supertest(app)
-          .patch(`/api/ideas/${idea_id}`)
+          .patch(`/api/ideas/idea/${idea_id}`)
           .set('Authorization',`Bearer ${bearerToken}`)
           .send({title:'a different title'})
           .expect(400,{error: 'Could not find idea'});
@@ -122,7 +122,7 @@ describe('Ideas Endpoints', () => {
         const ideaIdByUser2 = 2;
         const bearerTokenMatchingUser1 = bearerToken;
         return supertest(app)
-          .patch(`/api/ideas/${ideaIdByUser2}`)
+          .patch(`/api/ideas/idea/${ideaIdByUser2}`)
           .set('Authorization',`Bearer ${bearerTokenMatchingUser1}`)
           .send({title:'a different title'})
           .expect(401,{error: 'Unauthorized request'});
@@ -130,7 +130,7 @@ describe('Ideas Endpoints', () => {
       it('should return 204', () => {        
         const idea_id = 1;
         return supertest(app)
-          .patch(`/api/ideas/${idea_id}`)
+          .patch(`/api/ideas/idea/${idea_id}`)
           .set('Authorization',`Bearer ${bearerToken}`)
           .send({title:'a different title'})
           .expect(204);
@@ -139,11 +139,11 @@ describe('Ideas Endpoints', () => {
 
     //DELETE
 
-    describe('DELETE /ideas/:idea', () => {
+    describe('DELETE /ideas/idea/:idea', () => {
       it('should return 400 if no matching id', () => {
         const idea_id = 666;
         return supertest(app)
-          .delete(`/api/ideas/${idea_id}`)
+          .delete(`/api/ideas/idea/${idea_id}`)
           .set('Authorization',`Bearer ${bearerToken}`)
           .expect(400,{error: 'Could not find idea'});
       });    
@@ -151,14 +151,14 @@ describe('Ideas Endpoints', () => {
         const ideaIdByUser2 = 2;
         const bearerTokenMatchingUser1=bearerToken;
         return supertest(app)
-          .delete(`/api/ideas/${ideaIdByUser2}`)
+          .delete(`/api/ideas/idea/${ideaIdByUser2}`)
           .set('Authorization',`Bearer ${bearerTokenMatchingUser1}`)
           .expect(401,{error: 'Unauthorized request'});
       });    
       it('should return 204', () => {
         const idea_id = 1;
         return supertest(app)
-          .delete(`/api/ideas/${idea_id}`)
+          .delete(`/api/ideas/idea/${idea_id}`)
           .set('Authorization',`Bearer ${bearerToken}`)
           .expect(204);
       });    
