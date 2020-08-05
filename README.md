@@ -47,3 +47,7 @@ GET /api/followedIdeas/:id
 
 DELETE /api/followedIdeas/:id
 Unfollows an idea
+
+## Technology
+
+Made with Express
