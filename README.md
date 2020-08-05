@@ -6,69 +6,44 @@ Live App: https://idea-machine.vercel.app/
 API Endpoints:
 --------------
 
-Auth Endpoints
---------------
+### Users Endpoints
+
+POST /api/users
+Creates an account
+
+### Auth Endpoints
 
 POST /api/auth/login
+Logs in to an existing account
 
-Followed Ideas Endpoints
-------------------------
-
-GET /api/followedIdeas
-
-POST /api/followedIdeas
-
-GET /api/followedIdeas/:id
-
-DELETE /api/followedIdeas/:id
-
-Ideas Endpoints
----------------
+### Ideas Endpoints
 
 GET /api/ideas
+Gets all public ideas
 
 POST /api/ideas
+Posts a new idea
 
 GET /ideas/idea/:id
 
 PATCH /ideas/idea/:id
+Updates an existing idea
 
 DELETE /ideas/idea/:id
+Deletes an existing idea
 
 GET /ideas/my-ideas
+Gets all ideas authored by the logged in user
 
-Users Endpoints
----------------
+### Followed Ideas Endpoints
 
-POST /api/users
+GET /api/followedIdeas
+Gets all ideas followed by logged in user
 
+POST /api/followedIdeas
+Follows an idea
 
+GET /api/followedIdeas/:id
 
-
-
-
-
-
-
-
-
-
-## Set up
-
-Install dependencies `npm start`
-
-Set up database and tables
-
-
-
-## Scripts
-
-Start the application `npm start`
-
-Start nodemon for the application `npm run dev`
-
-Run the tests `npm test`
-
-## Deploying
-
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.
+DELETE /api/followedIdeas/:id
+Unfollows an idea
