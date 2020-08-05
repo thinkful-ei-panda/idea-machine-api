@@ -163,6 +163,18 @@ describe('Ideas Endpoints', () => {
           .expect(204);
       });    
     });      
+
+    describe('GET /ideas/my-ideas', () => {
+      it('returns 200 with ideas matching logged in user', () => {
+        return supertest(app)
+          .get('/api/ideas/my-ideas')
+          .set('Authorization',`Bearer ${bearerToken}`)
+          .expect(200)
+          .expect(res => {
+            expect(res.body[0].user_name).to.eql(testUser.user_name);            
+          });
+      });
+    });
   });
 });
 

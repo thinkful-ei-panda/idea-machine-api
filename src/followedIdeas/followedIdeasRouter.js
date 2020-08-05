@@ -83,7 +83,7 @@ FollowedIdeasRouter
         
         FollowedIdeasService.deleteMatchingIdeaIdAndFollowerId(req.app.get('db'),id,req.user.id)
           .then(() => res.status(204).json())
-          .catch(next);        
+          .catch(next);
       })
       .catch(next);
   });
