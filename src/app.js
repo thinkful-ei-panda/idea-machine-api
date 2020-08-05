@@ -21,14 +21,8 @@ app.use(cors());
 app.use(helmet());
 
 app.get('/', (req,res) => {
-  res.status(200).send('Hello Boilerplate');
+  res.status(200).send('Hello Idea Machine');
 });
-
-// app.use(function(req, res, next) {
-//   res.setHeader('Access-Control-Allow-Origin', 'https://idea-machine.vercel.app'); // update to match the domain you will make the request from
-//   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-//   next();
-// });
 
 app.use('/api/auth', AuthRouter);
 app.use('/api/users',UsersRouter);
