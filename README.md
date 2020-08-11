@@ -2,6 +2,7 @@ ID8 by Wesley Rou
 =================
 
 Live App: https://idea-machine.vercel.app/
+Client Repo: https://github.com/thinkful-ei-panda/idea-machine-client
 
 API Endpoints:
 --------------
@@ -50,4 +51,4 @@ Unfollows an idea
 
 ## Technology
 
-Made with Express
+Made with the Express framework. Uses postgrator to perform table migrations to SQL database and knex library to write make changes to the tables.
